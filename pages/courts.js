@@ -1,4 +1,5 @@
 import { Header } from "@components/Header";
+import { HeaderLogo } from "@components/Header/HeaderLogo";
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
@@ -113,7 +114,7 @@ const CourtList = () => {
 
     return (
         <>
-            <Header />
+            <HeaderLogo />
             <div className="container mx-auto px-4">
                 <h1
                     className="text-4xl text-center font-bold mb-8"
