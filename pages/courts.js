@@ -1,5 +1,5 @@
 import { Header } from "@components/Header";
-import { HeaderLogo } from "@components/Header/HeaderLogo";
+import { HeaderLogo } from "@components/Header/HeaderPages";
 import { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";

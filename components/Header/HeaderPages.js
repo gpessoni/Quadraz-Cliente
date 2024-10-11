@@ -1,3 +1,5 @@
+import { ButtonGroup } from "@components/Button";
+import { NavPages } from "@components/NavLogo";
 import { SectionContainer } from "@components/Section";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,7 +17,6 @@ export const HeaderLogo = () => {
                             <Image
                                 src="/quadraz.svg"
                                 alt="logo"
-                                // className="h-6 w-auto"
                                 height="50"
                                 width="180"
                                 priority
@@ -23,6 +24,9 @@ export const HeaderLogo = () => {
                         </Link>
                     </h1>
                 </div>
+                <SectionContainer className="flex items-center ml-auto">
+                    <NavPages />
+                </SectionContainer>
             </SectionContainer>
         </header>
     );
