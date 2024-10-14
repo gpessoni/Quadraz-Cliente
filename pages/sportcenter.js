@@ -1,58 +1,34 @@
 import { Header } from "@components/Header";
 import { HeaderLogo } from "@components/Header/HeaderPages";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
-
-// Dados fictícios de centros esportivos
-const sportCenters = [
-    {
-        id: "1",
-        name: "Centro Esportivo ABC",
-        description: "Um centro esportivo completo com diversas instalações.",
-        address: "Rua A, 123",
-        number: "123",
-        neighborhood: "Centro",
-        city: "Cidade A",
-        state: "SP",
-        country: "Brasil",
-        email: "contato@centroabc.com.br",
-        phone: "1234-5678",
-        hasWifi: true,
-        wifiPassword: "wifi123",
-        hasParking: true,
-        parkingCapacity: 50,
-        hasPlayground: true,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        image: "https://via.placeholder.com/300x200" // Adicione a URL da imagem do centro esportivo
-    },
-    {
-        id: "2",
-        name: "Centro Esportivo XYZ",
-        description: "Centro focado em esportes aquáticos e terrestres.",
-        address: "Avenida B, 456",
-        number: "456",
-        neighborhood: "Bairro B",
-        city: "Cidade B",
-        state: "SP",
-        country: "Brasil",
-        email: "contato@centroxyz.com.br",
-        phone: "9876-5432",
-        hasWifi: false,
-        parkingCapacity: 20,
-        hasPlayground: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        image: "https://via.placeholder.com/300x200" // Adicione a URL da imagem do centro esportivo
-    }
-    // Adicione mais centros esportivos conforme necessário
-];
 
 const SportCenterList = () => {
     const [selectedCenter, setSelectedCenter] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
-    const [filteredCenters, setFilteredCenters] = useState(sportCenters);
+    const [sportCenters, setSportCenters] = useState([]);
+    const [filteredCenters, setFilteredCenters] = useState([]);
+
+    const fetchSportCenters = async () => {
+        try {
+            const response = await fetch(
+                "http://localhost:3000/api/sports-center/list"
+            );
+            if (!response.ok) {
+                throw new Error("Erro ao buscar centros esportivos");
+            }
+            const data = await response.json();
+            setSportCenters(data);
+            setFilteredCenters(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchSportCenters(); // Chama a função para buscar os dados quando o componente é montado
+    }, []);
 
     const handleSelectCenter = (center) => {
         setSelectedCenter(center);
@@ -70,6 +46,12 @@ const SportCenterList = () => {
             center.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredCenters(filtered);
+    };
+
+    const getImageSrc = (logo) => {
+        return logo?.startsWith("data:image/")
+            ? logo
+            : `data:image/jpeg;base64,${logo}`;
     };
 
     return (
@@ -103,7 +85,7 @@ const SportCenterList = () => {
                             className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                         >
                             <img
-                                src={center.image}
+                                src={getImageSrc(center.logo)} // Usa a função para obter o src da imagem
                                 alt={center.name}
                                 className="w-full h-56 object-cover"
                             />
@@ -116,7 +98,7 @@ const SportCenterList = () => {
                                 </p>
                                 <button
                                     onClick={() => handleSelectCenter(center)}
-                                    className="w-full text-white bg-[#2e2d37] py-2 rounded hover:bg-blue-700 transition-colors"
+                                    className="w-full text-white bg-[#2e2d37] py-2 rounded transition-all duration-200 ease-in-out hover:shadow-lg transform hover:scale-105"
                                 >
                                     Ver Detalhes
                                 </button>
@@ -141,7 +123,7 @@ const SportCenterList = () => {
                             </div>
                             <div className="p-4">
                                 <img
-                                    src={selectedCenter.image}
+                                    src={getImageSrc(selectedCenter.logo)} // Usa a função para obter o src da imagem
                                     alt={selectedCenter.name}
                                     className="w-full h-64 object-cover rounded mb-4"
                                 />
